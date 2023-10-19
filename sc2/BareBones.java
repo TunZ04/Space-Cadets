@@ -53,9 +53,8 @@ public class BareBones
                     if (VARS.get(VARNAMESTACK.peek()) == 0){
                         PTRSTACK.pop();
                         VARNAMESTACK.pop();
-                    } else{
-                        cmmdptr = PTRSTACK.peek();
                     }
+                    else{ cmmdptr = PTRSTACK.peek(); }
 
                     break;
                 default:
