@@ -55,15 +55,12 @@ public class BareBones
                         VARNAMESTACK.pop();
                     }
                     else{ cmmdptr = PTRSTACK.peek(); }
-
                     break;
                 default:
                     System.out.println("Invalid Command");
             }
             System.out.println(FILESTRINGS.get(cmmdptr));
-            if (!cmmdword.equals("end") & !cmmdword.equals("while")){
-                System.out.println(VARS + "\n");
-            }
+            if (!cmmdword.equals("end") & !cmmdword.equals("while")){ System.out.println(VARS + "\n"); }
         }
 
         //for inputting your own code as the program runs
