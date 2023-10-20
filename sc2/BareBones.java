@@ -7,7 +7,7 @@ public class BareBones
     private static Map<String, Integer> VARS = new HashMap<>();
     private static Stack<Integer> PTRSTACK = new Stack();
     private static Stack<String> VARNAMESTACK = new Stack();
-    //I really should make a data structure to combine both stacks.
+    //I really should make a data structure to combine both stacks. I didn't want to make a new class though.
     //I could then easily add a compare value, so it doesn't have to be 0
 
     private static String cmmdword;
@@ -38,37 +38,29 @@ public class BareBones
                 FILESTRINGS.add(input);  //note, user must input 1 command per line without ';' when using console
             }
             StringTokenizer command = new StringTokenizer(FILESTRINGS.get(cmmdptr), " ");
-            try { cmmdword = command.nextToken(); } //cmmdword contains the command word ie: clear, incr, decr, while
+            try { cmmdword = command.nextToken(); }
             catch(Exception e) { System.out.println("Error: no command word"); }
-            try { varname = command.nextToken(); } //varname contains the variable name of the statement (this will be a key in the hm)
+            try { varname = command.nextToken(); }
             catch(Exception e) { if (cmmdword.equals("exit")) System.out.println("Error: no variable name"); }
 
             int currvar = (VARS.get(varname) == null) ? 0 : VARS.get(varname);
-            switch (cmmdword) {
-                case "clear":
-                    VARS.put(varname, 0);
-                    break;
-                case "incr":
-                    VARS.put(varname, currvar + 1);
-                    break;
-                case "decr":
-                    VARS.put(varname, currvar - 1);
-                    break;
-                case "while":
+            switch (cmmdword){
+                case "clear" -> VARS.put(varname, 0);
+                case "incr" -> VARS.put(varname, currvar + 1);
+                case "decr" -> VARS.put(varname, currvar - 1);
+                case "while" ->{
                     PTRSTACK.push(cmmdptr);
                     VARNAMESTACK.push(varname);
-                    break;
-                case "end":
+                }
+                case "end" ->
+                {
                     if (VARS.get(VARNAMESTACK.peek()) == 0){
                         PTRSTACK.pop();
                         VARNAMESTACK.pop();
-                    }
-                    else{ cmmdptr = PTRSTACK.peek(); }
-                    break;
-                case "exit":
-                    break;
-                default:
-                    System.out.println("Invalid Command");
+                    } else { cmmdptr = PTRSTACK.peek(); }
+                }
+                case "exit" -> {}
+                default -> System.out.println("Invalid Command");
             }
             System.out.println(FILESTRINGS.get(cmmdptr));
             if (!cmmdword.equals("end") & !cmmdword.equals("while")){ System.out.println(VARS + "\n"); }
