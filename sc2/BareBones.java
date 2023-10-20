@@ -8,7 +8,7 @@ public class BareBones
     private static Stack<Integer> PTRSTACK = new Stack();
     private static Stack<String> VARNAMESTACK = new Stack();
     //I really should make a data structure to combine both stacks.
-    //I could then easily add a compare value so it doesn't have to be 0
+    //I could then easily add a compare value, so it doesn't have to be 0
 
     private static String cmmdword;
     private static String varname;
@@ -28,11 +28,20 @@ public class BareBones
         System.out.println("*************************************\nWelcome to the BareBones interpreter\n" +
                 "*************************************\n");
 
-        for (int cmmdptr = 0; cmmdptr < FILESTRINGS.size(); cmmdptr++)
+        String input = "";
+        int cmmdptr = 0;
+        while (!input.equals("exit"))
         {
+            //this enables the user to input their own code in console after the file has been exhausted
+            if (cmmdptr == FILESTRINGS.size()){
+                input = s.nextLine();
+                FILESTRINGS.add(input);  //note, user must input 1 command per line without ';' when using console
+            }
             StringTokenizer command = new StringTokenizer(FILESTRINGS.get(cmmdptr), " ");
-            cmmdword = command.nextToken();
-            varname = command.nextToken();
+            try { cmmdword = command.nextToken(); } //cmmdword contains the command word ie: clear, incr, decr, while
+            catch(Exception e) { System.out.println("Error: no command word"); }
+            try { varname = command.nextToken(); } //varname contains the variable name of the statement (this will be a key in the hm)
+            catch(Exception e) { if (cmmdword.equals("exit")) System.out.println("Error: no variable name"); }
 
             int currvar = (VARS.get(varname) == null) ? 0 : VARS.get(varname);
             switch (cmmdword) {
@@ -56,21 +65,14 @@ public class BareBones
                     }
                     else{ cmmdptr = PTRSTACK.peek(); }
                     break;
+                case "exit":
+                    break;
                 default:
                     System.out.println("Invalid Command");
             }
             System.out.println(FILESTRINGS.get(cmmdptr));
             if (!cmmdword.equals("end") & !cmmdword.equals("while")){ System.out.println(VARS + "\n"); }
+            cmmdptr += 1;
         }
-
-        //for inputting your own code as the program runs
-//        String input = "";
-//        while (!input.equals("exit"))
-//        {
-//            StringTokenizer command = new StringTokenizer(input, " ");
-//            cmmdword = command.nextToken();
-//            varname = command.nextToken();
-//
-//        }
     }
 }
